@@ -1,0 +1,29 @@
+# inventory.yml
+FABRIC:
+  children:
+    DC1:
+      children:
+        DC1_SPINES:
+          hosts:
+            SPINE1:
+              ansible_host: 10.18.156.24
+            SPINE2:
+              ansible_host: 10.18.153.127
+        DC1_LEAFS:
+          hosts:
+            LEAF1:
+              ansible_host: 10.18.149.49
+            LEAF2:
+              ansible_host: 10.18.150.196
+            LEAF3:
+              ansible_host: 10.18.153.189
+            LEAF4:
+              ansible_host: 10.18.149.40
+    DC1_NETWORK_SERVICES:
+      children:
+        DC1_LEAFS:
+        DC1_SPINES:
+    DC1_ENDPOINTS:
+      children:
+        DC1_LEAFS:
+        DC1_SPINES:
