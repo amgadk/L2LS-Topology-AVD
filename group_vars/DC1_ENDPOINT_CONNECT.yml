@@ -1,0 +1,28 @@
+---
+servers:
+  - name: Host1
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet1 ]
+        switches: [ pod-4-1 ]
+        vlans: 110
+        mode: access
+        spanning_tree_portfast: edge
+
+  - name: Host2
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet2 ]
+        switches: [ pod-4-1 ]
+        vlans: 120
+        mode: access
+        spanning_tree_portfast: edge
+
+  - name: Host3
+    adapters:
+      - endpoint_ports: [ Ethernet1 ]
+        switch_ports: [ Ethernet3 ]
+        switches: [ pod-4-1 ]
+        vlans: 130
+        mode: access
+        spanning_tree_portfast: edge
