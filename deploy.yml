@@ -1,19 +1,15 @@
 ---
 # deploy.yml
 
-- name: Build and Deploy Configs
-  hosts: FABRIC
+- name: Configuration deployment
+  hosts: FABRIC # <-- Targeted devices
+  connection: local
   gather_facts: false
   tasks:
-
-    - name: Generate AVD Structured Configurations and Fabric Documentation
+    - name: Deploy configurations and tags to CloudVision
       ansible.builtin.import_role:
-        name: arista.avd.eos_designs
-
-    - name: Generate Device Configurations and Documentation
-      ansible.builtin.import_role:
-        name: arista.avd.eos_cli_config_gen
-
-    - name: Deploy Configurations to Devices
-      ansible.builtin.import_role:
-        name: arista.avd.eos_config_deploy_eapi
+        name: arista.avd.cv_deploy
+      vars:
+        cv_server: 10.18.161.208
+        cv_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaWQiOjc2Mjg2MTg1MTkxMzQ4NjM2MDQsImRzbiI6ImF2ZCIsImRzdCI6ImFjY291bnQiLCJleHAiOjE3NzY3Nzk5OTksImlhdCI6MTc3NjE3Nzc0MSwib2dpIjozLCJvZ24iOiJEZWZhdWx0Iiwic2lkIjoiZDJkODdkZmIzZmY0ZmVkZTFhZjdiODU4MzM0ZGI4ZTQzZjk1YjE1MTQwNTA1MTRhNTI1Mjk2YTc3M2RlMTZlMi1jQVNnakhrME81Sno2ZUdpS2VZcmRpM0RrazJYNjFYaTluc2dUWEpFIn0.rvS5IansRq9ye33zZ4ZLSeP2Wt0tc4-s0aHFmcivBOGRQF1OrPxSvGZWM5x4E5gWw2HFWN7LJFRW-j1v_31xJp077mOWjAwLjCFrYYZrcRh9ROdXwmPbg5jBEo0cGzMr8CNlhMv7RqTBIOvIUo9sUjHKrDPqRGlad1PfGvJ1iPlSy-xed7e3_FckQxvAs0h0GdgJiRX2RzUrIVcUoaP_DWBtZyKpO30UELzXnUCe5BK_UQjCetcgQJvWw0BBMbFIMlTIbOFiennE-QHOXuCGRgxpv7Y7-y7EW9R4KiZZM5PIRDvGfVe48O-Anh8tmvmkjNbNi7IUSVDGzb9WXMku1lcy6gjJHyDc9I7fW_3UgA7OaKYnCXWKlC74LvUhuQj21rTnR4PW4LpJ1YgZcp3TWtN3QTy3jWm8_OclwdhYLWU1i1DpRpBGka4WNnsjWkPtO02DSnTCYiGbd0ZIux1nkOgWT_FSEOmIiqvKnnHd-iwtdox3UXBDagdx38iSQ2YIaq1yeCIjjR4IFjqwy4boi_HBCtoXMln1XuXwfrkEqZySWl6s-8_xs3oVXMqZCkjb5_grvVrsDRTSRoVJkJ-y7ZID_OgW06OX1tE-9ZEa71PUTdUPcrpMmyIxbvHqb_pJV8ms1aBpOHuHPHdOVvOciMu5xiKKxM9mKEPUEblbXEc
+        cv_verify_certs: false

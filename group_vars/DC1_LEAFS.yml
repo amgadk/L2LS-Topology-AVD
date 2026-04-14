@@ -16,9 +16,10 @@ l2leaf:
 
   node_groups:
     - group: RACK1
-      mlag: true
+      #mlag: true
       filter:
-        tags: [bluezone, greenzone]
+       # tags: [bluezone, greenzone]
+        tags: [ "Web","App" ]
       nodes:
         - name: LEAF1
           id: 1
@@ -29,9 +30,10 @@ l2leaf:
           mgmt_ip: 192.168.0.21/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2]
     - group: RACK2
-      mlag: true
+      #mlag: true
       filter:
-        tags: [bluezone, orangezone]
+        #tags: [bluezone, orangezone]
+        tags: [ "Web","App" ]
       nodes:
         - name: LEAF3
           id: 3
