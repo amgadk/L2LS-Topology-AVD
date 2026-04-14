@@ -1,14 +1,18 @@
 ---
 ### group_vars/DC1_SPINES.yml
 
-type: l2spine     # Must be either l2spine|l3spine
+type: l3spine     # Must be either l2spine|l3spine
 
 # Spine Switches (L2 only)
-l2spine:
+l3spine:
   defaults:
     platform: cEOSLab
     spanning_tree_mode: mstp
     spanning_tree_priority: 4096
+    bgp_as: 65000
+    loopback_ipv4_pool: 10.255.0.0/24
+    mlag_peer_l3_ipv4_pool: 10.255.1.0/24
+    virtual_router_mac_address: 00:1c:73:00:dc:01
     mlag_peer_ipv4_pool: 172.16.100.0/24
     mlag_interfaces: [Ethernet47, Ethernet48]
   node_groups:
@@ -20,3 +24,5 @@ l2spine:
         - name: SPINE2
           id: 2
           mgmt_ip: 192.168.0.112/24
+
+underlay_routing_protocol: ebgp
