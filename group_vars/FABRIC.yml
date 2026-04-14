@@ -4,6 +4,7 @@
 # Set the Fabric Name - must match an Ansible Inventory Group
 fabric_name: DC1
 
+mgmt_interface_vrf: default
 # Documentation
 eos_designs_documentation:
   connected_endpoints: true
