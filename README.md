@@ -2,11 +2,6 @@
 # This title is used for search results
 title: L2LS Fabric
 ---
-<!--
-  ~ Copyright (c) 2023-2026 Arista Networks, Inc.
-  ~ Use of this source code is governed by the Apache License 2.0
-  ~ that can be found in the LICENSE file.
-  -->
 
 # L2LS Fabric
 
@@ -21,30 +16,7 @@ The network fabric in this example is layer 2; an external firewall (FW) or laye
 
 The example is meant as a starting foundation. You may build more advanced fabrics based on this design. To keep things simple, the Arista eAPI will be used to communicate with the switches.
 
-???+ info
 
-    The configurations may also be applied with CloudVision with a few updates to your playbook and Ansible variables.
-
-## Installation & Requirements
-
---8<--
-ansible_collections/arista/avd/examples/common/example-installation.md
---8<--
-
-``` shell
-ansible-avd-examples/     (directory where playbook was run)
-  ├── l2ls-fabric/
-    ├── documentation/
-    ├── group_vars/
-    ├── images/
-    ├── intended/
-    ├── switch-basic-configurations/
-    ├── ansible.cfg
-    ├── build.yml
-    ├── deploy.yml
-    ├── inventory.yml
-    └── README.md (this document)
-```
 
 ## Design Overview
 
@@ -57,27 +29,6 @@ The drawing below shows the physical topology used in this example. The interfac
 ???+ note
 
     In this example, the FW/L3 Device and individual hosts (A-D) are not managed by AVD, but the switch ports connecting to these devices are.
-
-## Basic EOS Switch Configuration
-
-Basic connectivity between the Ansible controller host and the switches must be established before Ansible can be used to deploy configurations. The following should be configured on all switches:
-
-- Switch Hostname
-- IP enabled interface
-- Username and Password defined
-- Management eAPI enabled
-
-???+ info
-
-    When using vEOS/cEOS virtual switches, `Management0` or `Management1` is used. When using hardware switches, `Management1` is used. The included basic switch configurations may need to be adjusted for your environment.
-
-Below is the basic configuration file for SPINE1:
-
-``` shell
---8<--
-ansible_collections/arista/avd/examples/l2ls-fabric/switch-basic-configurations/SPINE1.cfg
---8<--
-```
 
 ## Ansible Inventory
 
@@ -102,19 +53,6 @@ This naming convention makes it possible to extend anything quickly but can be c
 
 ![Figure: 2](images/ansible_groups.svg)
 
-### inventory.yml
-
-The below inventory file represents two spines and four leafs. The nodes are defined under the groups DC1_SPINES and DC1_LEAFS, respectively. We apply group variables (group_vars) to these groups to define their functionality and configurations.
-
-The hostnames specified in the inventory must exist either in DNS or in the hosts file on your Ansible host to allow successful name lookup and be able to reach the switches directly. A successful ping from the Ansible host to each inventory host verifies name resolution (e.g., ping SPINE1).
-
-Alternatively, if DNS is unavailable, define the ansible_host variable as an IP address for each device.
-
-``` yaml
---8<--
-ansible_collections/arista/avd/examples/l2ls-fabric/inventory.yml
---8<--
-```
 
 ## AVD Fabric Variables
 
