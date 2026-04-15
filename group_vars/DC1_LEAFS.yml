@@ -19,7 +19,7 @@ l2leaf:
       #mlag: true
       filter:
        # tags: [bluezone, greenzone]
-        tags: [ "Web","App" ]
+        tags: [ "Web","App", "IOT", "STAFF" ]
       nodes:
         - name: LEAF1
           id: 1
@@ -33,7 +33,7 @@ l2leaf:
       #mlag: true
       filter:
         #tags: [bluezone, orangezone]
-        tags: [ "Web","App" ]
+        tags: [ "Web","App", "IOT", "STAFF" ]
       nodes:
         - name: LEAF3
           id: 3

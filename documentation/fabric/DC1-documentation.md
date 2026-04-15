@@ -110,10 +110,12 @@
 
 | Name | Type | Port | Fabric Device | Fabric Port | Description | Shutdown | Mode | Access VLAN | Trunk Allowed VLANs | Profile |
 | ---- | ---- | ---- | ------------- | ----------- | ----------- | -------- | ---- | ----------- | ------------------- | ------- |
-| Host2 | server | Eth1 | LEAF4 | Ethernet3 | SERVER_Host2_Eth1 | False | access | 30 | - | PP-ORANGE |
-| HostA | server | Eth1 | LEAF1 | Ethernet3 | SERVER_HostA_Eth1 | False | access | 10 | - | PP-BLUE |
-| HostB | server | Eth1 | LEAF2 | Ethernet3 | SERVER_HostB_Eth1 | False | access | 20 | - | PP-GREEN |
-| HostC | server | Eth1 | LEAF3 | Ethernet3 | SERVER_HostC_Eth1 | False | access | 10 | - | PP-BLUE |
+| Host1 | server | Eth1 | LEAF1 | Ethernet3 | SERVER_Host1_Eth1 | False | access | 10 | - | PP-BLUE |
+| Host2 | server | Eth1 | LEAF2 | Ethernet3 | SERVER_Host2_Eth1 | False | access | 20 | - | PP-GREEN |
+| Host3 | server | Eth1 | LEAF3 | Ethernet3 | SERVER_Host3_Eth1 | False | access | 10 | - | PP-BLUE |
+| Host4 | server | Eth1 | LEAF4 | Ethernet3 | SERVER_Host4_Eth1 | False | access | 20 | - | PP-GREEN |
+| Host11 | server | Eth1 | LEAF1 | Ethernet4 | SERVER_Host11_Eth1 | False | access | 30 | - | PP-ORANGE |
+| Host22 | server | Eth1 | LEAF2 | Ethernet4 | SERVER_Host22_Eth1 | False | access | 40 | - | PP-YELLOW |
 
 ### Port Profiles
 
@@ -124,3 +126,4 @@
 | PP-FIREWALL | - |
 | PP-GREEN | PP-DEFAULTS |
 | PP-ORANGE | PP-DEFAULTS |
+| PP-YELLOW | PP-DEFAULTS |

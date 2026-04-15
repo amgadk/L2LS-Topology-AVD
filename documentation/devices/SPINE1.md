@@ -230,6 +230,8 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 10 | Ten | - |
 | 20 | Twenty | - |
+| 30 | Thirty | - |
+| 40 | Fourty | - |
 | 4093 | MLAG_L3 | MLAG |
 | 4094 | MLAG | MLAG |
 
@@ -242,6 +244,12 @@ vlan 10
 !
 vlan 20
    name Twenty
+!
+vlan 30
+   name Thirty
+!
+vlan 40
+   name Fourty
 !
 vlan 4093
    name MLAG_L3
@@ -262,10 +270,10 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | L2_LEAF1_Ethernet1 | *trunk | *10,20 | *- | *- | 1 |
-| Ethernet2 | L2_LEAF2_Ethernet1 | *trunk | *10,20 | *- | *- | 1 |
-| Ethernet3 | L2_LEAF3_Ethernet1 | *trunk | *10,20 | *- | *- | 3 |
-| Ethernet4 | L2_LEAF4_Ethernet1 | *trunk | *10,20 | *- | *- | 3 |
+| Ethernet1 | L2_LEAF1_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 1 |
+| Ethernet2 | L2_LEAF2_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 1 |
+| Ethernet3 | L2_LEAF3_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 3 |
+| Ethernet4 | L2_LEAF4_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 3 |
 | Ethernet5 | FIREWALL_FIREWALL_Eth1 | *trunk | *10,20,30 | *- | *- | 5 |
 | Ethernet47 | MLAG_SPINE2_Ethernet47 | *trunk | *- | *- | *MLAG | 47 |
 | Ethernet48 | MLAG_SPINE2_Ethernet48 | *trunk | *- | *- | *MLAG | 47 |
@@ -320,8 +328,8 @@ interface Ethernet48
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | L2_RACK1_Port-Channel1 | trunk | 10,20 | - | - | - | - | 1 | - |
-| Port-Channel3 | L2_RACK2_Port-Channel1 | trunk | 10,20 | - | - | - | - | 3 | - |
+| Port-Channel1 | L2_RACK1_Port-Channel1 | trunk | 10,20,30,40 | - | - | - | - | 1 | - |
+| Port-Channel3 | L2_RACK2_Port-Channel1 | trunk | 10,20,30,40 | - | - | - | - | 3 | - |
 | Port-Channel5 | FIREWALL_FIREWALL | trunk | 10,20,30 | - | - | - | - | 5 | - |
 | Port-Channel47 | MLAG_SPINE2_Port-Channel47 | trunk | - | - | MLAG | - | - | - | - |
 
@@ -332,7 +340,7 @@ interface Ethernet48
 interface Port-Channel1
    description L2_RACK1_Port-Channel1
    no shutdown
-   switchport trunk allowed vlan 10,20
+   switchport trunk allowed vlan 10,20,30,40
    switchport mode trunk
    switchport
    mlag 1
@@ -340,7 +348,7 @@ interface Port-Channel1
 interface Port-Channel3
    description L2_RACK2_Port-Channel1
    no shutdown
-   switchport trunk allowed vlan 10,20
+   switchport trunk allowed vlan 10,20,30,40
    switchport mode trunk
    switchport
    mlag 3
@@ -395,6 +403,8 @@ interface Loopback0
 | --------- | ----------- | --- | --- | -------- |
 | Vlan10 | Ten | default | - | False |
 | Vlan20 | Twenty | default | - | False |
+| Vlan30 | Thirty | default | - | False |
+| Vlan40 | Fourty | default | - | False |
 | Vlan4093 | MLAG_L3 | default | 1500 | False |
 | Vlan4094 | MLAG | default | 1500 | False |
 
@@ -404,6 +414,8 @@ interface Loopback0
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
 | Vlan10 | default | 10.10.10.2/24 | - | 10.10.10.1 | - | - |
 | Vlan20 | default | 10.20.20.2/24 | - | 10.20.20.1 | - | - |
+| Vlan30 | default | 10.30.30.2/24 | - | 10.30.30.1 | - | - |
+| Vlan40 | default | 10.40.40.2/24 | - | 10.40.40.1 | - | - |
 | Vlan4093 | default | 10.255.1.0/31 | - | - | - | - |
 | Vlan4094 | default | 172.16.100.0/31 | - | - | - | - |
 
@@ -422,6 +434,18 @@ interface Vlan20
    no shutdown
    ip address 10.20.20.2/24
    ip virtual-router address 10.20.20.1
+!
+interface Vlan30
+   description Thirty
+   no shutdown
+   ip address 10.30.30.2/24
+   ip virtual-router address 10.30.30.1
+!
+interface Vlan40
+   description Fourty
+   no shutdown
+   ip address 10.40.40.2/24
+   ip virtual-router address 10.40.40.1
 !
 interface Vlan4093
    description MLAG_L3

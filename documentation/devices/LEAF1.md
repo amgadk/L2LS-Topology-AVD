@@ -225,6 +225,8 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 10 | Ten | - |
 | 20 | Twenty | - |
+| 30 | Thirty | - |
+| 40 | Fourty | - |
 | 4094 | MLAG | MLAG |
 
 ### VLANs Device Configuration
@@ -236,6 +238,12 @@ vlan 10
 !
 vlan 20
    name Twenty
+!
+vlan 30
+   name Thirty
+!
+vlan 40
+   name Fourty
 !
 vlan 4094
    name MLAG
@@ -252,9 +260,10 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | L2_SPINE1_Ethernet1 | *trunk | *10,20 | *- | *- | 1 |
-| Ethernet2 | L2_SPINE2_Ethernet1 | *trunk | *10,20 | *- | *- | 1 |
-| Ethernet3 | SERVER_HostA_Eth1 | access | 10 | - | - | - |
+| Ethernet1 | L2_SPINE1_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 1 |
+| Ethernet2 | L2_SPINE2_Ethernet1 | *trunk | *10,20,30,40 | *- | *- | 1 |
+| Ethernet3 | SERVER_Host1_Eth1 | access | 10 | - | - | - |
+| Ethernet4 | SERVER_Host11_Eth1 | access | 30 | - | - | - |
 | Ethernet47 | MLAG_LEAF2_Ethernet47 | *trunk | *- | *- | *MLAG | 47 |
 | Ethernet48 | MLAG_LEAF2_Ethernet48 | *trunk | *- | *- | *MLAG | 47 |
 
@@ -275,9 +284,17 @@ interface Ethernet2
    channel-group 1 mode active
 !
 interface Ethernet3
-   description SERVER_HostA_Eth1
+   description SERVER_Host1_Eth1
    no shutdown
    switchport access vlan 10
+   switchport mode access
+   switchport
+   spanning-tree portfast
+!
+interface Ethernet4
+   description SERVER_Host11_Eth1
+   no shutdown
+   switchport access vlan 30
    switchport mode access
    switchport
    spanning-tree portfast
@@ -301,7 +318,7 @@ interface Ethernet48
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | L2_SPINES_Port-Channel1 | trunk | 10,20 | - | - | - | - | 1 | - |
+| Port-Channel1 | L2_SPINES_Port-Channel1 | trunk | 10,20,30,40 | - | - | - | - | 1 | - |
 | Port-Channel47 | MLAG_LEAF2_Port-Channel47 | trunk | - | - | MLAG | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
@@ -311,7 +328,7 @@ interface Ethernet48
 interface Port-Channel1
    description L2_SPINES_Port-Channel1
    no shutdown
-   switchport trunk allowed vlan 10,20
+   switchport trunk allowed vlan 10,20,30,40
    switchport mode trunk
    switchport
    mlag 1

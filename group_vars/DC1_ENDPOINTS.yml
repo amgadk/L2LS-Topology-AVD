@@ -24,39 +24,59 @@ port_profiles:
     mode: access
     vlans: "30"
     parent_profile: PP-DEFAULTS
+  - profile: PP-YELLOW
+    mode: access
+    vlans: "40"
+    parent_profile: PP-DEFAULTS
   - profile: PP-FIREWALL
     mode: trunk
     vlans: "10,20,30"
 
 servers:
-  - name: HostA
+  - name: Host1
     rack: POD1
     adapters:
       - endpoint_ports: [Eth1]
         switch_ports: [Ethernet3]
         switches: [LEAF1]
         profile: PP-BLUE
-  - name: HostB
+  - name: Host2
     rack: POD1
     adapters:
       - endpoint_ports: [Eth1]
         switch_ports: [Ethernet3]
         switches: [LEAF2]
         profile: PP-GREEN
-  - name: HostC
+  - name: Host3
     rack: POD2
     adapters:
       - endpoint_ports: [Eth1]
         switch_ports: [Ethernet3]
         switches: [LEAF3]
         profile: PP-BLUE
-  - name: Host2
+  - name: Host4
     rack: POD2
     adapters:
       - endpoint_ports: [Eth1]
         switch_ports: [Ethernet3]
         switches: [LEAF4]
+        profile: PP-GREEN
+
+  - name: Host11
+    rack: POD1
+    adapters:
+      - endpoint_ports: [Eth1]
+        switch_ports: [Ethernet4]
+        switches: [LEAF1]
         profile: PP-ORANGE
+
+  - name: Host22
+    rack: POD1
+    adapters:
+      - endpoint_ports: [Eth1]
+        switch_ports: [Ethernet4]
+        switches: [LEAF2]
+        profile: PP-YELLOW
 
 firewalls:
 
