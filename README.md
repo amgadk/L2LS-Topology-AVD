@@ -24,7 +24,7 @@ The example is meant as a starting foundation. You may build more advanced fabri
 
 The drawing below shows the physical topology used in this example. The interface assignment shown here are referenced across the entire example, so keep that in mind if this example must be adapted to a different topology.
 
-![Figure: 1](images/l2l2.png)
+![Figure: 1](/images/l2ls.png)
 
 
 In this example, the FW/L3 Device and individual hosts (A-D) are not managed by AVD, but the switch ports connecting to these devices are.
