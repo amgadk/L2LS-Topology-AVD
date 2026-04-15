@@ -78,6 +78,22 @@ servers:
         switches: [LEAF2]
         profile: PP-YELLOW
 
+  - name: Host33
+    rack: POD2
+    adapters:
+      - endpoint_ports: [Eth1]
+        switch_ports: [Ethernet4]
+        switches: [LEAF3]
+        profile: PP-ORANGE
+
+  - name: Host44
+    rack: POD2
+    adapters:
+      - endpoint_ports: [Eth1]
+        switch_ports: [Ethernet4]
+        switches: [LEAF4]
+        profile: PP-YELLOW
+
 firewalls:
 
   - name: FIREWALL
