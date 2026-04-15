@@ -26,9 +26,8 @@ The drawing below shows the physical topology used in this example. The interfac
 
 ![Figure: 1](images/pure_L2LS_topo.svg)
 
-???+ note
 
-    In this example, the FW/L3 Device and individual hosts (A-D) are not managed by AVD, but the switch ports connecting to these devices are.
+In this example, the FW/L3 Device and individual hosts (A-D) are not managed by AVD, but the switch ports connecting to these devices are.
 
 ## Ansible Inventory
 
@@ -67,87 +66,18 @@ To apply AVD variables to the nodes in the fabric, we make use of Ansible group_
 | DC1_NETWORK_SERVICES.yml | VLANs                                         |
 | DC1_ENDPOINTS.yml        | Port Profiles and Connected Endpoint settings |
 
-The tabs below show the Ansible **group_vars** used in this example.
-
-=== "FABRIC"
-    At the top level (FABRIC), the following variables are defined in **group_vars/FABRIC.yml**. These Ansible variables apply to all fabric nodes and are a common place to set AAA, users, NTP, and connectivity settings. Update local_users and passwords for your environment.
-
-    You can create a sha512_password by creating a username and password on a switch and copy/paste it within double quotes here.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/FABRIC.yml
-    --8<--
-    ```
-
-=== "DC1"
-    At the site level (DC1), the following variables are defined in **group_vars/DC1.yml**. Management settings and uplink MTU are defined at this level.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/DC1.yml
-    --8<--
-    ```
-
-=== "DC1_SPINES"
-    In an L2LS design, there are two types of spine nodes: `l2spine` and `l3spine`. In AVD, the node type defines the functionality and the EOS CLI configuration to be generated. For an L2LS design, we will use node type `l2spine`. Later, we will add routing to the spines by changing the node type to `l3spine`.
-
-    Variables applied under the node key type (spine/leaf) defaults section are inherited by nodes under each type. These variables may be overwritten under the node itself.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/DC1_SPINES.yml
-    --8<--
-    ```
-
-=== "DC1_LEAFS"
-    In an L2LS design, we have one type of leaf node: `l2leaf`.
-
-    The spine interface used by a particular leaf is defined from the leaf's perspective with a variable called `uplink_switch_interfaces`. For example, LEAF2 has a unique variable `uplink_switch_interfaces: [Ethernet2, Ethernet2]` defined. This means that LEAF2 is connected to SPINE1's Ethernet2 and SPINE2's Ethernet2 interface.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/DC1_LEAFS.yml
-    --8<--
-    ```
-
-=== "DC1_NETWORK_SERVICES"
-    You add VLANs to the fabric by updating the **group_vars/DC1_NETWORK_SERVICES.yml**. Each VLAN will be given a name and a list of tags. The tags filter the VLAN to specific leaf Pairs. These variables are applied to the spine and leaf nodes since they are a part of this group.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/DC1_NETWORK_SERVICES.yml
-    --8<--
-    ```
-
-=== "DC1_ENDPOINTS"
-    Our fabric would only be complete by connecting some devices to it. We define connected endpoints and port profiles in **group_vars/DC1_ENDPOINTS.yml**. Each endpoint's adapter defines which switch port(s) and port profile to use. In our example, we have four hosts and a firewall connected to the fabric. The connected endpoints keys are used for logical separation and apply to interface descriptions. These variables are applied to the spine and leaf nodes since they are a part of this inventory group.
-
-    ``` yaml
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/group_vars/DC1_ENDPOINTS.yml
-    --8<--
-    ```
 
 ## The Playbooks
 
 Now that we have defined all of our input variables according to AVD Design data models, it is time to generate some configs. To make things simple, we provide two playbooks. One playbook will allow you to build and view EOS CLI intended configurations per device. The second playbook has an additional task to deploy the configurations to your switches. The playbooks are provided in the tabs below. The playbook is straightforward as it imports two AVD roles: eos_designs and eos_cli_config_gen, which do all the heavy lifting. Combining these two roles produces recommended configurations that follow Arista Design Guides.
 
-=== "build.yml"
 
-    ``` yaml
-    --8<--
     ansible_collections/arista/avd/examples/l2ls-fabric/build.yml
-    --8<--
-    ```
 
-=== "deploy.yml"
 
-    ``` yaml
-    --8<--
+
     ansible_collections/arista/avd/examples/l2ls-fabric/deploy.yml
-    --8<--
-    ```
+
 
 ### Playbook Run
 
@@ -167,178 +97,5 @@ To build and deploy the configurations to your switches, run the playbook called
 ansible-playbook playbooks/deploy.yml
 ```
 
-### EOS Intended Configurations
-
-Your configuration files should be similar to these.
-
-=== "SPINE1"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/SPINE1.cfg
-    --8<--
-    ```
-
-=== "SPINE2"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/SPINE2.cfg
-    --8<--
-    ```
-
-=== "LEAF1"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/LEAF1.cfg
-    --8<--
-    ```
-
-=== "LEAF2"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/LEAF2.cfg
-    --8<--
-    ```
-
-=== "LEAF3"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/LEAF3.cfg
-    --8<--
-    ```
-
-=== "LEAF4"
-
-    ``` shell
-    --8<--
-    ansible_collections/arista/avd/examples/l2ls-fabric/intended/configs/LEAF4.cfg
-    --8<--
-    ```
-
-## Add Routing to Spines
-
-Our example used an external L3/FW Device to route between subnets. This is very typical in a Layer 2 only environment. To route on the spines, we remove the L3/FW device from the topology and create the SVIs on the spines. The updated topology is shown below.
-
-???+ note
-
-    The spine type has been changed to **l3spine**.
-
-![Figure: 3](images/L2LS_spine_routing.svg)
-
-The following group variable files need updating to enable L3 routing on the spines.
-
-- DC1_SPINES.yml
-- DC1_NETWORK_SERVICES.yml
-
-The updated changes are noted in the tabs below.
-
-=== "DC1_SPINES.yml"
-
-    - Update type to `l3spine` (enable routing)
-    - Change the node key **spine** to **l3spine** to match the node type set previously in DC1_SPINES.yml
-    - Add **loopback_ipv4_pool**
-    - Add **mlag_peer_l3_ipv4_pool**
-    - Add **virtual_router_mac_address**
-
-    Update DC1_SPINES.yml with the following recommended settings. Use your own IP pools.
-
-    ``` yaml
-    ---
-    ### group_vars/DC1_SPINES.yml
-
-    type: l3spine
-
-    # Node Key must be l3spine to match type
-    l3spine:
-      defaults:
-        platform: cEOSLab
-        spanning_tree_mode: mstp
-        spanning_tree_priority: 4096
-        # Loopback is used to generate a router-id
-        loopback_ipv4_pool: 192.168.1.0/24
-        mlag_peer_ipv4_pool: 192.168.0.0/24
-        # Needed for L3 peering across the MLAG Trunk
-        mlag_peer_l3_ipv4_pool: 10.1.1.0/24
-        # Used for SVI Virtual MAC address
-        virtual_router_mac_address: 00:1c:73:00:dc:01
-        mlag_interfaces: [Ethernet47, Ethernet48]
-      node_groups:
-        - group: SPINES
-          nodes:
-            - name: SPINE1
-              id: 1
-              mgmt_ip: 172.16.100.101/24
-            - name: SPINE2
-              id: 2
-              mgmt_ip: 172.16.100.102/24
-    ```
-
-=== "DC1_NETWORK_SERVICES.yml"
-
-    Update Network Services to use L3 SVIs.
-
-    ???+ Note
-
-        To create L3 SVIs on the spines, we need to utilize an L3 VRF. In our case, we will use the default VRF. `MY_FABRIC` is simply a tenant name for organizing VRFs and SVIs.
-
-    ``` yaml
-    tenants:
-      - name: MY_FABRIC
-        vrfs:
-          - name: default
-            vrf_id: 10
-            svis:
-              - id: 10
-                name: 'BLUE-NET'
-                tags: [bluezone]
-                enabled: true
-                ip_virtual_router_addresses:
-                  - 10.10.10.1
-                nodes:
-                  - node: SPINE1
-                    ip_address: 10.10.10.2/24
-                  - node: SPINE2
-                    ip_address: 10.10.10.3/24
-              - id: 20
-                name: 'GREEN-NET'
-                tags: [greenzone]
-                enabled: true
-                ip_virtual_router_addresses:
-                  - 10.20.20.1
-                nodes:
-                  - node: SPINE1
-                    ip_address: 10.20.20.2/24
-                  - node: SPINE2
-                    ip_address: 10.20.20.3/24
-              - id: 30
-                name: 'ORANGE-NET'
-                tags: [orangezone]
-                enabled: true
-                ip_virtual_router_addresses:
-                  - 10.30.30.1
-                nodes:
-                  - node: SPINE1
-                    ip_address: 10.30.30.2/24
-                  - node: SPINE2
-                    ip_address: 10.30.30.3/24
-    ```
-
-Now rerun your playbook and build the new configurations. The intended/configs for the spines will have been updated with L3 SVIs.
-
-``` bash
-ansible-playbook playbooks/build.yml
-```
-
-If you wish to deploy these changes, then run the deploy playbook.
-
-``` bash
-ansible-playbook playbooks/deploy.yml
-```
-
-## Next steps
 
 Try building your topology.
